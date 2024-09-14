@@ -1,0 +1,16 @@
+name: MxTags
+version: '1.0-SNAPSHOT'
+main: dev.mxlx.mxTags.MxTags
+api-version: '1.20'
+author: Maschlax
+prefix: MxTags
+description: A simple Tag System
+commands:
+  tags:
+    usage: /<command>
+    description: Open the Tag Selection GUI
+    aliases: [tag]
+  tagmanager:
+    usage: /<command> <argument>
+    description: Manage your tags
+    aliases: [tm]
