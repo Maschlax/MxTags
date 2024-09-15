@@ -96,9 +96,21 @@ public class TagManager {
             statement.executeUpdate();
             statement.close();
 
+            setTag(player, tagID, true);
+
         } catch (SQLException e) {
             mxTags.getLogger().severe("Unable to select tagID: " + tagID);
             if (mxTags.debugMode()) e.printStackTrace();
         }
+    }
+
+    public void setTag(Player player, int tagID, boolean message) {
+        String tag = mxTags.tagManager().getTag(tagID);
+        tag = mxTags.colorFormatter().formatHexColors(tag);
+
+        player.setDisplayName(player.getName() + " " + tag);
+        player.setPlayerListName(player.getName() + " " + tag);
+
+        if (message) player.sendMessage("Successfully selected tag: " + tag);
     }
 }

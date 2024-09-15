@@ -16,10 +16,7 @@ public class JoinLeaveListener implements Listener {
 
         int tagID = mxTags.tagManager().getPlayerTagID(player);
         if ((tagID < 1)) return;
-        String tag = mxTags.tagManager().getTag(tagID);
-        tag = mxTags.colorFormatter().formatHexColors(tag);
 
-        player.setDisplayName(player.getName() + " " + tag);
-        player.setPlayerListName(player.getName() + " " + tag);
+        mxTags.tagManager().setTag(player, tagID, false);
     }
 }

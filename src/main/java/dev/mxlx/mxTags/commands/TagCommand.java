@@ -18,7 +18,6 @@ public class TagCommand implements CommandExecutor {
         try {
             int tagID = Integer.parseInt(args[0]);
             mxTags.tagManager().selectTag(player, tagID);
-            player.sendMessage("Successfully selected tag with id: " + tagID);
 
         } catch (NumberFormatException exception) {
             exception.printStackTrace();
