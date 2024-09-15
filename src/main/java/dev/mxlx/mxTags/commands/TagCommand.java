@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TagCommand implements CommandExecutor {
+
     private MxTags mxTags = MxTags.getInstance();
 
     @Override
@@ -14,10 +15,14 @@ public class TagCommand implements CommandExecutor {
         if (!(sender instanceof Player)) return true;
         Player player = (Player) sender;
 
-        String fullMessage = String.join(" ", args);
-        fullMessage = mxTags.colorFormatter().formatHexColors(fullMessage);
-        player.setDisplayName(player.getName() + " " + fullMessage);
-        player.setPlayerListName(player.getName() + " " + fullMessage);
+        try {
+            int tagID = Integer.parseInt(args[0]);
+            mxTags.tagManager().selectTag(player, tagID);
+            player.sendMessage("Successfully selected tag with id: " + tagID);
+
+        } catch (NumberFormatException exception) {
+            exception.printStackTrace();
+        }
 
         return true;
     }

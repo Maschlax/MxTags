@@ -15,6 +15,9 @@ public final class MxTags extends JavaPlugin {
 
     private ColorFormatter colorFormatter;
     private DataBase database;
+    private TagManager tagManager;
+
+    private boolean debugMode = false;
 
     @Override
     public void onEnable() {
@@ -42,6 +45,7 @@ public final class MxTags extends JavaPlugin {
 
     private void registerUtils() {
         this.colorFormatter = new ColorFormatter();
+        this.tagManager = new TagManager();
     }
 
     private void registerConfig() {
@@ -55,6 +59,11 @@ public final class MxTags extends JavaPlugin {
         getConfig().addDefault("database.database_name", "databaseName");
         getConfig().options().copyDefaults(true);
         saveConfig();
+
+        if (getConfig().getBoolean("debugmode")) {
+            getLogger().info("Enabled Debug mode.");
+            debugMode = true;
+        }
     }
 
     private void registerDatabase() {
@@ -71,7 +80,7 @@ public final class MxTags extends JavaPlugin {
         } catch (SQLException exception) {
             getLogger().severe("Could not initialize database!");
             getLogger().severe("Are the settings in the config correct?");
-            if (getConfig().getBoolean("debugmode")) {
+            if (debugMode) {
                 exception.printStackTrace();
             }
         }
@@ -79,6 +88,10 @@ public final class MxTags extends JavaPlugin {
 
     public ColorFormatter colorFormatter() {
         return this.colorFormatter;
+    }
+
+    public TagManager tagManager() {
+        return this.tagManager;
     }
 
     public DataBase getDatabase() {
@@ -92,4 +105,6 @@ public final class MxTags extends JavaPlugin {
     public static MxTags getInstance() {
         return JavaPlugin.getPlugin(MxTags.class);
     }
+
+    public boolean debugMode() { return debugMode; }
 }

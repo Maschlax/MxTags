@@ -42,7 +42,8 @@ public class DataBase {
             mxTags.getLogger().info("Successfully connected to database");
 
         } catch (ClassNotFoundException exception) {
-            exception.printStackTrace();
+            mxTags.getLogger().severe("Failed to load JDBC driver or get connection");
+            if (mxTags.debugMode()) exception.printStackTrace();
         }
 
         return this.connection;
@@ -50,7 +51,7 @@ public class DataBase {
 
     public void initializeDatabase() throws SQLException {
         Statement statement = getConnection().createStatement();
-        String sql = "CREATE TABLE IF NOT EXISTS tags(id int primary key, tag text, priority int)";
+        String sql = "CREATE TABLE IF NOT EXISTS tags(id int PRIMARY KEY AUTO_INCREMENT, tag text, slot int)";
         statement.execute(sql);
         sql = "CREATE TABLE IF NOT EXISTS players(uuid varchar(36), tag int, FOREIGN KEY (tag) REFERENCES tags(id))";
         statement.execute(sql);
@@ -63,7 +64,8 @@ public class DataBase {
                 this.connection.close();
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            mxTags.getLogger().severe("Error closing connection");
+            if (mxTags.debugMode()) exception.printStackTrace();
         }
     }
 }
