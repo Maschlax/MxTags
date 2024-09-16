@@ -11,7 +11,6 @@ public class ColorFormatter {
     public String formatHexColors(String input) {
         Pattern pattern = Pattern.compile("<#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?>");
         Matcher matcher = pattern.matcher(input);
-        if (!matcher.find()) return input;
 
         StringBuffer output = new StringBuffer();
 
@@ -24,6 +23,7 @@ public class ColorFormatter {
         }
 
         matcher.appendTail(output);
+        
         String finalOutput = ChatColor.translateAlternateColorCodes('&', output.toString());
         return finalOutput;
     }

@@ -12,6 +12,7 @@ public class TagManager {
     private MxTags mxTags = MxTags.getInstance();
 
     public void createTag(String tag, Integer slot) {
+        tag = mxTags.colorFormatter().formatHexColors(tag);
         try {
             PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = slot + 1 WHERE slot >= ?");
             statement.setInt(1, slot);
@@ -89,9 +90,19 @@ public class TagManager {
     public void selectTag(Player player, int tagID) {
         String uuid = player.getUniqueId().toString();
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("INSERT INTO players(uuid, tag) VALUES (?, ?)");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT tag FROM players WHERE uuid = ?");
             statement.setString(1, uuid);
-            statement.setInt(2, tagID);
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE players SET tag = ? WHERE uuid = ?");
+                statement.setInt(1, tagID);
+                statement.setString(2, uuid);
+            } else {
+                statement = mxTags.getDatabase().getConnection().prepareStatement("INSERT INTO players(uuid, tag) VALUES (?, ?)");
+                statement.setString(1, uuid);
+                statement.setInt(2, tagID);
+            }
 
             statement.executeUpdate();
             statement.close();
@@ -106,7 +117,6 @@ public class TagManager {
 
     public void setTag(Player player, int tagID, boolean message) {
         String tag = mxTags.tagManager().getTag(tagID);
-        tag = mxTags.colorFormatter().formatHexColors(tag);
 
         player.setDisplayName(player.getName() + " " + tag);
         player.setPlayerListName(player.getName() + " " + tag);
