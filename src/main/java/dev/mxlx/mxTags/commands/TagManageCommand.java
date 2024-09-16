@@ -6,6 +6,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TagManageCommand implements CommandExecutor {
 
     private MxTags mxTags = MxTags.getInstance();
@@ -24,6 +27,7 @@ public class TagManageCommand implements CommandExecutor {
             case "modify":
                 break;
             case "list":
+                listTags(sender);
                 break;
             case "help": default:
                 showHelpMessage(sender);
@@ -70,5 +74,19 @@ public class TagManageCommand implements CommandExecutor {
         }
         mxTags.tagManager().deleteTag(Integer.parseInt(args[1]));
         sender.sendMessage("Successfully deleted tag with id: " + args[1]);
+    }
+
+    private void listTags(CommandSender sender) {
+        sender.sendMessage("==> MxTags List");
+        ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags();
+
+        if (tags.isEmpty()) { sender.sendMessage(ChatColor.GRAY + "No tags found"); return; }
+
+        for (String tagEntry : tags) {
+            String[] entry = tagEntry.split(":");
+            String tagID = entry[0];
+            String tag = entry[1];
+            sender.sendMessage(ChatColor.GRAY + tagID + ChatColor.DARK_GRAY + " : " + tag);
+        }
     }
 }

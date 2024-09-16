@@ -23,7 +23,7 @@ public class ColorFormatter {
         }
 
         matcher.appendTail(output);
-        
+
         String finalOutput = ChatColor.translateAlternateColorCodes('&', output.toString());
         return finalOutput;
     }

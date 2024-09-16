@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TagManager {
 
@@ -122,5 +124,26 @@ public class TagManager {
         player.setPlayerListName(player.getName() + " " + tag);
 
         if (message) player.sendMessage("Successfully selected tag: " + tag);
+    }
+
+    public List<String> listTags() {
+        ArrayList<String> tags = null;
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id, tag FROM tags");
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                String tagID = "" + results.getInt("id");
+                String tag = results.getString(2);
+                tags.add(tagID + ":" + tag);
+            }
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Error listing tags");
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+
+        return tags;
     }
 }
