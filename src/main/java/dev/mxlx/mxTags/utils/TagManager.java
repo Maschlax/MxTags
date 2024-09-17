@@ -135,7 +135,8 @@ public class TagManager {
             while (results.next()) {
                 String tagID = "" + results.getInt("id");
                 String tag = results.getString(2);
-                tags.add(tagID + "¢" + tag);
+                String tagSlot = "" + results.getInt(3);
+                tags.add(tagID + "¢" + tag + "¢" + tagSlot);
             }
             statement.close();
 

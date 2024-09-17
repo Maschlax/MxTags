@@ -1,6 +1,7 @@
 package dev.mxlx.mxTags.commands;
 
 import dev.mxlx.mxTags.MxTags;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ public class TagCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) return true;
+        if (!(sender instanceof Player)) { sender.sendMessage(ChatColor.RED + "This command is player exclusive!"); return true; }
         Player player = (Player) sender;
 
         try {
