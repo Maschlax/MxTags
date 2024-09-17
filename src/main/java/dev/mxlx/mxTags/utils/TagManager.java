@@ -127,15 +127,15 @@ public class TagManager {
     }
 
     public List<String> listTags() {
-        ArrayList<String> tags = null;
+        ArrayList<String> tags = new ArrayList<>();
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id, tag FROM tags");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags");
             ResultSet results = statement.executeQuery();
 
-            if (results.next()) {
+            while (results.next()) {
                 String tagID = "" + results.getInt("id");
                 String tag = results.getString(2);
-                tags.add(tagID + ":" + tag);
+                tags.add(tagID + "¢" + tag);
             }
             statement.close();
 

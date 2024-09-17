@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TagManageCommand implements CommandExecutor {
 
@@ -83,7 +82,7 @@ public class TagManageCommand implements CommandExecutor {
         if (tags.isEmpty()) { sender.sendMessage(ChatColor.GRAY + "No tags found"); return; }
 
         for (String tagEntry : tags) {
-            String[] entry = tagEntry.split(":");
+            String[] entry = tagEntry.split("¢");
             String tagID = entry[0];
             String tag = entry[1];
             sender.sendMessage(ChatColor.GRAY + tagID + ChatColor.DARK_GRAY + " : " + tag);
