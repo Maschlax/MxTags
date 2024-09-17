@@ -18,4 +18,4 @@ A simple PlayerTags Plugin (Player suffixes)
 - Add /tm modify Command
 
 ## Needs testing
-- None
+- /tm list Pagination

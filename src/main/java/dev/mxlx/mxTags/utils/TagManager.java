@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,10 +127,12 @@ public class TagManager {
         if (message) player.sendMessage("Successfully selected tag: " + tag);
     }
 
-    public List<String> listTags() {
+    public List<String> listTags(int page) {
         ArrayList<String> tags = new ArrayList<>();
+        int offset = (page * 10) - 10;
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags ORDER BY id LIMIT 10 OFFSET ?");
+            statement.setInt(1, offset);
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
@@ -146,5 +149,23 @@ public class TagManager {
         }
 
         return tags;
+    }
+
+    public int listPageAmount() {
+        int pageAmount = 0;
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT COUNT(*) FROM tags");
+            ResultSet results = statement.executeQuery();
+
+            int tagAmount = results.getFetchSize();
+            pageAmount = (int) Math.ceil(tagAmount / 10);
+
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Error getting tag listing page amount");
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+        return pageAmount;
     }
 }

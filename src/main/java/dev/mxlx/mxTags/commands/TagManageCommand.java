@@ -26,7 +26,7 @@ public class TagManageCommand implements CommandExecutor {
             case "modify":
                 break;
             case "list":
-                listTags(sender);
+                listTags(sender, args);
                 break;
             case "help": default:
                 showHelpMessage(sender);
@@ -75,10 +75,17 @@ public class TagManageCommand implements CommandExecutor {
         sender.sendMessage("Successfully deleted tag with id: " + args[1]);
     }
 
-    private void listTags(CommandSender sender) {
-        ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags();
+    private void listTags(CommandSender sender, String[] args) {
+        int page = 1;
+        try {
+            page = Integer.parseInt(args[1]);
+        } catch (NumberFormatException exception) {
+            sender.sendMessage("Invalid slot input. Use a valid integer");
+            return;
+        } catch (NullPointerException exception) {}
+        ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags(page);
 
-        sender.sendMessage(ChatColor.GOLD + "==> MxTags List (" + tags.size() + " total)");
+        sender.sendMessage(ChatColor.GOLD + "==> MxTags List" + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().listPageAmount() + ChatColor.YELLOW + ")");
         if (tags.isEmpty()) { sender.sendMessage(ChatColor.RED + "No tags found"); return; }
 
         sender.sendMessage(ChatColor.WHITE + "id" + ChatColor.GRAY + " :  " + ChatColor.WHITE + "tag" + ChatColor.GRAY + " : " + ChatColor.WHITE + "slot");
@@ -89,5 +96,6 @@ public class TagManageCommand implements CommandExecutor {
             String slot = entry[2];
             sender.sendMessage(ChatColor.WHITE + tagID + ChatColor.GRAY + " : " + tag + ChatColor.GRAY + " : " + ChatColor.WHITE + slot);
         }
+        sender.sendMessage("");
     }
 }
