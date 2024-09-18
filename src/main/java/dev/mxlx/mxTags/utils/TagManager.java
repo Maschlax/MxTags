@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,9 +153,13 @@ public class TagManager {
         return tags;
     }
 
-    public int listPageAmount() {
-        int pageAmount = 0;
+    public enum listType {
+        TAG_AMOUNT, PAGE_AMOUNT
+    }
+
+    public int getTagOrPageAmount(listType type) {
         int tagAmount = 0;
+        int returnAmount = 0;
         try {
             PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT COUNT(*) AS totalAmount FROM tags");
             ResultSet results = statement.executeQuery();
@@ -164,7 +167,9 @@ public class TagManager {
             if (results.next()) {
                 tagAmount = results.getInt("totalAmount");
             }
-            pageAmount = (tagAmount + ROW_AMOUNT_PER_PAGE - 1) / ROW_AMOUNT_PER_PAGE;
+            if (type == listType.PAGE_AMOUNT) {
+                returnAmount = (tagAmount + ROW_AMOUNT_PER_PAGE - 1) / ROW_AMOUNT_PER_PAGE;
+            } else returnAmount = tagAmount;
 
             statement.close();
 
@@ -172,6 +177,6 @@ public class TagManager {
             mxTags.getLogger().severe("Error getting tag listing page amount");
             if (mxTags.debugMode()) exception.printStackTrace();
         }
-        return pageAmount;
+        return returnAmount;
     }
 }

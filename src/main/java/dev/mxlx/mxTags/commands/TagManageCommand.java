@@ -1,6 +1,8 @@
 package dev.mxlx.mxTags.commands;
 
 import dev.mxlx.mxTags.MxTags;
+import dev.mxlx.mxTags.utils.TagManager;
+import dev.mxlx.mxTags.utils.math;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,18 +48,24 @@ public class TagManageCommand implements CommandExecutor {
     }
 
     private void createTag(CommandSender sender, String[] args) {
-        if (args.length != 3) {
-            sender.sendMessage("Invalid arguments provided. Use /tm create <name> <slot>");
+        if (args.length != 3 && args.length != 2) {
+            sender.sendMessage("Invalid arguments provided. Use /tm create <name> (<slot>)");
             return;
         }
-        try {
-            Integer.parseInt(args[2]);
-        } catch (NumberFormatException exception) {
-            sender.sendMessage("Invalid slot input. Use a valid integer");
-            return;
+        int slot = 0;
+
+        if (args.length == 3) {
+            if (!math.isInteger(args[2])) {
+                sender.sendMessage("Invalid slot input. Use a valid integer");
+                return;
+            }
+            slot = Integer.parseInt(args[2]);
+        } else {
+            slot = mxTags.tagManager().getTagOrPageAmount(TagManager.listType.TAG_AMOUNT) + 1;
         }
-        mxTags.tagManager().createTag(args[1], Integer.parseInt(args[2]));
-        sender.sendMessage("Successfully created tag '" +  args[1] + ChatColor.WHITE + "' in slot " + ChatColor.GRAY + args[2]);
+
+        mxTags.tagManager().createTag(args[1], slot);
+        sender.sendMessage("Successfully created tag '" +  args[1] + ChatColor.WHITE + "' in slot " + ChatColor.GRAY + slot);
     }
 
     private void deleteTag(CommandSender sender, String[] args) {
@@ -65,9 +73,7 @@ public class TagManageCommand implements CommandExecutor {
             sender.sendMessage("Invalid arguments provided. Use /tm delete <tagID>");
             return;
         }
-        try {
-            Integer.parseInt(args[1]);
-        } catch (NumberFormatException exception) {
+        if (!math.isInteger(args[1])) {
             sender.sendMessage("Invalid slot input. Use a valid integer");
             return;
         }
@@ -78,16 +84,16 @@ public class TagManageCommand implements CommandExecutor {
     private void listTags(CommandSender sender, String[] args) {
         int page = 1;
         if (args.length > 1) {
-            try {
-                page = Integer.parseInt(args[1]);
-            } catch (NumberFormatException exception) {
+            if (!math.isInteger(args[1])) {
                 sender.sendMessage("Invalid page input. Use a valid integer");
                 return;
-            } catch (NullPointerException exception) {}
+            } else {
+                page = Integer.parseInt(args[1]);
+            }
         }
         ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags(page);
 
-        sender.sendMessage(ChatColor.GOLD + "==> MxTags List" + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().listPageAmount() + ChatColor.YELLOW + ")");
+        sender.sendMessage(ChatColor.GOLD + "==> MxTags List" + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().getTagOrPageAmount(TagManager.listType.PAGE_AMOUNT) + ChatColor.YELLOW + ")");
         if (tags.isEmpty()) { sender.sendMessage(ChatColor.RED + "No tags found"); return; }
 
         sender.sendMessage(ChatColor.WHITE + "id" + ChatColor.GRAY + " :  " + ChatColor.WHITE + "tag" + ChatColor.GRAY + " : " + ChatColor.WHITE + "slot");
