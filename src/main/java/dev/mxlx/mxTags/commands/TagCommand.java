@@ -26,5 +26,4 @@ public class TagCommand implements CommandExecutor {
 
         return true;
     }
-
 }

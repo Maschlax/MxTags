@@ -2,7 +2,7 @@ package dev.mxlx.mxTags;
 
 import dev.mxlx.mxTags.commands.TagCommand;
 import dev.mxlx.mxTags.commands.TagManageCommand;
-import dev.mxlx.mxTags.listeners.JoinLeaveListener;
+import dev.mxlx.mxTags.listeners.JoinListener;
 import dev.mxlx.mxTags.utils.ColorFormatter;
 import dev.mxlx.mxTags.utils.DataBase;
 import dev.mxlx.mxTags.utils.TagManager;
@@ -40,7 +40,7 @@ public final class MxTags extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new JoinLeaveListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
     }
 
     private void registerUtils() {
