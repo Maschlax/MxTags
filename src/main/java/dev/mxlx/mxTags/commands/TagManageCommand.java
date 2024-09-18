@@ -41,7 +41,7 @@ public class TagManageCommand implements CommandExecutor {
         sender.sendMessage("/tm create <name> <slot> : Create a new tag");
         sender.sendMessage("/tm delete <tagID> : Remove a tag");
         sender.sendMessage("/tm modify <tagID> <name> <slot> : Modify a tag");
-        sender.sendMessage("/tm list : List all tags");
+        sender.sendMessage("/tm list (<page>) : List all tags");
         sender.sendMessage("/tm help : Show this message");
     }
 
@@ -77,12 +77,14 @@ public class TagManageCommand implements CommandExecutor {
 
     private void listTags(CommandSender sender, String[] args) {
         int page = 1;
-        try {
-            page = Integer.parseInt(args[1]);
-        } catch (NumberFormatException exception) {
-            sender.sendMessage("Invalid slot input. Use a valid integer");
-            return;
-        } catch (NullPointerException exception) {}
+        if (args.length > 1) {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch (NumberFormatException exception) {
+                sender.sendMessage("Invalid page input. Use a valid integer");
+                return;
+            } catch (NullPointerException exception) {}
+        }
         ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags(page);
 
         sender.sendMessage(ChatColor.GOLD + "==> MxTags List" + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().listPageAmount() + ChatColor.YELLOW + ")");

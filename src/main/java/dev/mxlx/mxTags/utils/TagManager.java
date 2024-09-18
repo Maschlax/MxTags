@@ -127,12 +127,15 @@ public class TagManager {
         if (message) player.sendMessage("Successfully selected tag: " + tag);
     }
 
+    private final int ROW_AMOUNT_PER_PAGE = 10;
+
     public List<String> listTags(int page) {
         ArrayList<String> tags = new ArrayList<>();
-        int offset = (page * 10) - 10;
+        int offset = (page * ROW_AMOUNT_PER_PAGE) - ROW_AMOUNT_PER_PAGE;
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags ORDER BY id LIMIT 10 OFFSET ?");
-            statement.setInt(1, offset);
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags ORDER BY id LIMIT ? OFFSET ?");
+            statement.setInt(1, ROW_AMOUNT_PER_PAGE);
+            statement.setInt(2, offset);
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
@@ -153,12 +156,15 @@ public class TagManager {
 
     public int listPageAmount() {
         int pageAmount = 0;
+        int tagAmount = 0;
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT COUNT(*) FROM tags");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT COUNT(*) AS totalAmount FROM tags");
             ResultSet results = statement.executeQuery();
 
-            int tagAmount = results.getFetchSize();
-            pageAmount = (int) Math.ceil(tagAmount / 10);
+            if (results.next()) {
+                tagAmount = results.getInt("totalAmount");
+            }
+            pageAmount = (tagAmount + ROW_AMOUNT_PER_PAGE - 1) / ROW_AMOUNT_PER_PAGE;
 
             statement.close();
 

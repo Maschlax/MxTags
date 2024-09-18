@@ -10,12 +10,11 @@ A simple PlayerTags Plugin (Player suffixes)
 - /tagmanager : Show Help message
 - /tm create <name> <slot>
 - /tm delete <tagID>
-- /tm list : List all tags
+- /tm list : List all tags, Pagination with 10 results each page
 
 ## To Do
-- Add pagination for list command
 - Add Tag selection gui
 - Add /tm modify Command
 
 ## Needs testing
-- /tm list Pagination
+- Nothing
