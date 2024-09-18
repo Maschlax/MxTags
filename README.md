@@ -1,7 +1,9 @@
-# MxTags
-A simple PlayerTags Plugin (Player suffixes)
+# MxTags v0.7
+A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
 
-Made by Maschlax
+## Important
+### !! This plugin is 1.16+ only.
+### !! As of now, it is unsafe to use on public servers due to the lack of permission requirements
 
 ## Config
 Enable or disable debug mode. Useful for getting more complex error messages.
