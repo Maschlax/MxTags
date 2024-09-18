@@ -26,7 +26,9 @@ public class ClickListener implements Listener {
         ItemStack item = event.getCurrentItem();
         String itemName = item.getItemMeta().getDisplayName();
 
-        int page = Integer.valueOf(title.substring(title.lastIndexOf(" - Page ") + 8));
+        String pageString = title.substring(title.indexOf("Page ") + 5);
+        pageString = pageString.substring(0, pageString.indexOf("/"));
+        int page = Integer.valueOf(pageString);
 
         if (itemName.equals(ChatColor.YELLOW + "Previous page")) {
             mxTags.tagSelectionGUI().openTagSelectionGUI(player, page - 1);
