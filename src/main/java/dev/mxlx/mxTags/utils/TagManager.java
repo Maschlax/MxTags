@@ -201,7 +201,7 @@ public class TagManager {
             statement.close();
 
         } catch (SQLException exception) {
-            mxTags.getLogger().severe("Error getting tag listing page amount");
+            mxTags.getLogger().severe("Error getting listEntry amount for type: " + type);
             if (mxTags.debugMode()) exception.printStackTrace();
         }
         return returnAmount;
@@ -209,6 +209,24 @@ public class TagManager {
 
     public boolean nextGUIpageExists(int currentPage) {
         if (currentPage < getEntryAmount(listEntryType.GUI_PAGE_AMOUNT)) return true;
+        return false;
+    }
+
+    public boolean tagExists(String tag) {
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT 1 FROM tags WHERE tag = ?");
+            statement.setString(1, tag);
+            ResultSet results = statement.executeQuery();
+            if (results.next()) {
+                return true;
+            }
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Error getting tag listing page amount");
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+
         return false;
     }
 }

@@ -22,7 +22,7 @@ public class TagSelectionGUI {
 
         player.closeInventory();
 
-        Inventory inventory = Bukkit.createInventory(null, 54, ChatColor.DARK_AQUA + "Tag Selector - Page " + page + "/" + tagManager.getEntryAmount(TagManager.listEntryType.GUI_PAGE_AMOUNT));
+        Inventory inventory = Bukkit.createInventory(null, 54, "Tag Selector - Page " + page + "/" + tagManager.getEntryAmount(TagManager.listEntryType.GUI_PAGE_AMOUNT));
         ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTagsAsGUIpage(page);
 
         int index = 0;

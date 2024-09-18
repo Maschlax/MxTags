@@ -18,7 +18,7 @@ public class ClickListener implements Listener {
         if (event.getCurrentItem() == null) return;
 
         String title = event.getView().getTitle();
-        if (!title.startsWith(ChatColor.DARK_AQUA + "Tag Selector")) return;
+        if (!title.startsWith("Tag Selector")) return;
 
         event.setCancelled(true);
 
@@ -38,7 +38,8 @@ public class ClickListener implements Listener {
             return;
         }
 
-        setTag(player, itemName);
+        if (player.getDisplayName().toLowerCase().contains(itemName.toLowerCase())) return;
+        if (mxTags.tagManager().tagExists(itemName)) setTag(player, itemName);
     }
 
     private void setTag(Player player, String tag) {
