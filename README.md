@@ -19,12 +19,12 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - /tag : Open tag selection GUI
 - /tagmanager \<argument> : Main command - Alias: /tm
 - /tm help : Show Help message
-- /tm create <name> (\<slot>)
-- /tm delete <tagID>
+- /tm create \<name> (\<slot>)
+- /tm delete \<tagID>
 - /tm list (\<page>) : List all tags, Pagination with 10 results each page
 
 ## Planned features
-- Add /tm modify Command
+- Add /tm modify command
 - Add permissions
 - Check which databases are supported using my syntax
 - Add Config for messages (with colorformatting support)
