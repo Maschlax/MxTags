@@ -2,11 +2,12 @@ package dev.mxlx.mxTags;
 
 import dev.mxlx.mxTags.commands.TagCommand;
 import dev.mxlx.mxTags.commands.TagManageCommand;
+import dev.mxlx.mxTags.listeners.ClickListener;
 import dev.mxlx.mxTags.listeners.JoinListener;
 import dev.mxlx.mxTags.utils.ColorFormatter;
 import dev.mxlx.mxTags.utils.DataBase;
 import dev.mxlx.mxTags.utils.TagManager;
-import me.maschlax.mxapi.MxAPI;
+import dev.mxlx.mxTags.utils.TagSelectionGUI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ public final class MxTags extends JavaPlugin {
     private ColorFormatter colorFormatter;
     private DataBase database;
     private TagManager tagManager;
+    private TagSelectionGUI tagSelectionGUI;
 
     private boolean debugMode = false;
 
@@ -41,11 +43,13 @@ public final class MxTags extends JavaPlugin {
 
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new ClickListener(), this);
     }
 
     private void registerUtils() {
         this.colorFormatter = new ColorFormatter();
         this.tagManager = new TagManager();
+        this.tagSelectionGUI = new TagSelectionGUI();
     }
 
     private void registerConfig() {
@@ -95,12 +99,12 @@ public final class MxTags extends JavaPlugin {
         return this.tagManager;
     }
 
-    public DataBase getDatabase() {
-        return this.database;
+    public TagSelectionGUI tagSelectionGUI() {
+        return this.tagSelectionGUI;
     }
 
-    public MxAPI mxAPI() {
-        return JavaPlugin.getPlugin(MxAPI.class);
+    public DataBase getDatabase() {
+        return this.database;
     }
 
     public static MxTags getInstance() {

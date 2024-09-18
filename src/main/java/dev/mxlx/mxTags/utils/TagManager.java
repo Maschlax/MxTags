@@ -1,6 +1,7 @@
 package dev.mxlx.mxTags.utils;
 
 import dev.mxlx.mxTags.MxTags;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -123,17 +124,17 @@ public class TagManager {
         player.setDisplayName(player.getName() + " " + tag);
         player.setPlayerListName(player.getName() + " " + tag);
 
-        if (message) player.sendMessage("Successfully selected tag: " + tag);
+        if (message) player.sendMessage(ChatColor.GREEN + "Successfully selected tag: " + tag);
     }
 
-    private final int ROW_AMOUNT_PER_PAGE = 10;
+    private final int ROW_AMOUNT_PER_CHAT_LIST_PAGE = 10;
 
     public List<String> listTags(int page) {
         ArrayList<String> tags = new ArrayList<>();
-        int offset = (page * ROW_AMOUNT_PER_PAGE) - ROW_AMOUNT_PER_PAGE;
+        int offset = (page * ROW_AMOUNT_PER_CHAT_LIST_PAGE) - ROW_AMOUNT_PER_CHAT_LIST_PAGE;
         try {
             PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags ORDER BY id LIMIT ? OFFSET ?");
-            statement.setInt(1, ROW_AMOUNT_PER_PAGE);
+            statement.setInt(1, ROW_AMOUNT_PER_CHAT_LIST_PAGE);
             statement.setInt(2, offset);
             ResultSet results = statement.executeQuery();
 
@@ -153,11 +154,33 @@ public class TagManager {
         return tags;
     }
 
-    public enum listType {
-        TAG_AMOUNT, PAGE_AMOUNT
+    public List<String> listTagsAsGUIpage(int page) {
+        ArrayList<String> tags = new ArrayList<>();
+        int offset = (page * 45) - 45;
+
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT tag FROM tags ORDER BY id LIMIT 45 OFFSET ?");
+            statement.setInt(1, offset);
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                String tag = results.getString("tag");
+                tags.add(tag);
+            }
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Error listing tags");
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+
+        return tags;
     }
 
-    public int getTagOrPageAmount(listType type) {
+    public enum listEntryType {
+        TAG_AMOUNT, CHAT_PAGE_AMOUNT, GUI_PAGE_AMOUNT
+    }
+
+    public int getEntryAmount(listEntryType type) {
         int tagAmount = 0;
         int returnAmount = 0;
         try {
@@ -167,8 +190,12 @@ public class TagManager {
             if (results.next()) {
                 tagAmount = results.getInt("totalAmount");
             }
-            if (type == listType.PAGE_AMOUNT) {
-                returnAmount = (tagAmount + ROW_AMOUNT_PER_PAGE - 1) / ROW_AMOUNT_PER_PAGE;
+            if (type == listEntryType.CHAT_PAGE_AMOUNT) {
+                returnAmount = (tagAmount + ROW_AMOUNT_PER_CHAT_LIST_PAGE - 1) / ROW_AMOUNT_PER_CHAT_LIST_PAGE;
+
+            } else if (type == listEntryType.GUI_PAGE_AMOUNT) {
+                returnAmount = (tagAmount + 45 - 1) / 45;
+
             } else returnAmount = tagAmount;
 
             statement.close();
@@ -178,5 +205,10 @@ public class TagManager {
             if (mxTags.debugMode()) exception.printStackTrace();
         }
         return returnAmount;
+    }
+
+    public boolean nextGUIpageExists(int currentPage) {
+        if (currentPage < getEntryAmount(listEntryType.GUI_PAGE_AMOUNT)) return true;
+        return false;
     }
 }
