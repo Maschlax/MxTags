@@ -1,6 +1,7 @@
+# Not sure if any other database works, I think I've used MariaDB syntax
 debugmode: false
 database:
-  type: "mysql"
+  type: "mariadb"
   host: "localhost"
   port: "3306"
   user: "user"

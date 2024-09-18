@@ -50,8 +50,9 @@ public final class MxTags extends JavaPlugin {
 
     private void registerConfig() {
         saveDefaultConfig();
+        getConfig().options().header("Not sure if any other database works, I think I've used MariaDB syntax");
         getConfig().addDefault("debugmode", false);
-        getConfig().addDefault("database.type", "mysql");
+        getConfig().addDefault("database.type", "mariadb");
         getConfig().addDefault("database.host", "localhost");
         getConfig().addDefault("database.port", "port");
         getConfig().addDefault("database.user", "user");
