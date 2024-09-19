@@ -41,7 +41,6 @@ public class TagManageCommand implements CommandExecutor {
 
     private void showHelpMessage(CommandSender sender) {
         sender.sendMessage("==> MxTags Help");
-        sender.sendMessage(" • Use -1 for inverted slot order");
         sender.sendMessage("/tm create <name> <slot> : Create a new tag");
         sender.sendMessage("/tm delete <tagID> : Remove a tag");
         sender.sendMessage("/tm modify <tagID> <name> <slot> : Modify a tag");
@@ -62,6 +61,10 @@ public class TagManageCommand implements CommandExecutor {
                 return;
             }
             slot = Integer.parseInt(args[2]);
+            if (slot < 0) {
+                sender.sendMessage(ChatColor.RED + "Invalid slot input. Value cannot be negative");
+                return;
+            }
         } else {
             slot = mxTags.tagManager().getEntryAmount(TagManager.listEntryType.TAG_AMOUNT) + 1;
         }
