@@ -30,6 +30,7 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 
 ## Planned features
 - Add /tm modify command
+- Add tab completion for /tagmanager arguments
 - Add Config for messages (with colorformatting support)
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
 - Check which databases are supported using my syntax
