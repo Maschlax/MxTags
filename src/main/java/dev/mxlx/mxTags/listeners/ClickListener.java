@@ -39,13 +39,8 @@ public class ClickListener implements Listener {
         }
 
         if (player.getDisplayName().toLowerCase().contains(itemName.toLowerCase())) return;
-        if (mxTags.tagManager().tagExists(itemName)) setTag(player, itemName);
-    }
-
-    private void setTag(Player player, String tag) {
-        player.setDisplayName(player.getName() + " " + tag);
-        player.setPlayerListName(player.getName() + " " + tag);
-
-        player.sendMessage(ChatColor.GREEN + "Successfully selected tag: " + tag);
+        int tagID = (event.getSlot() + 1 ) * page;
+        if (mxTags.tagManager().tagExists(itemName)) mxTags.tagManager().selectTag(player, tagID);
+        mxTags.tagSelectionGUI().openTagSelectionGUI(player, page);
     }
 }

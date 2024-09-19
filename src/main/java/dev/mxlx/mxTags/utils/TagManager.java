@@ -57,8 +57,6 @@ public class TagManager {
 
             if (results.next()) {
                 tag = results.getString("tag");
-            } else {
-                mxTags.getLogger().severe("Unable to find tag: " + tagID);
             }
             statement.close();
 

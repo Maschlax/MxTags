@@ -31,9 +31,10 @@ public class TagSelectionGUI {
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(tag);
             List<String> lore = Arrays.asList("", ChatColor.GREEN + "Click to select this tag");
-            if (tagManager.getTag(tagManager.getPlayerTagID(player)).equals(tag)) {
-                lore.set(1, ChatColor.AQUA + "You have selected this tag");
-            }
+            try {
+                if (ChatColor.stripColor(tagManager.getTag(tagManager.getPlayerTagID(player))).equalsIgnoreCase(ChatColor.stripColor(tag))) {
+                    lore.set(1, ChatColor.AQUA + "You have selected this tag");
+                } } catch (NullPointerException exception) {}
             meta.setLore(lore);
             item.setItemMeta(meta);
 
