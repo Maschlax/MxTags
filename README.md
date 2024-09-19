@@ -29,7 +29,6 @@ Hex Colors can be used in tags under the format "<#ffffff>"
 Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same "Color Format" setting
 
 ## Planned features
-- Add /tm modify command
 - Add tab completion for /tagmanager arguments
 - Add Config for messages (with colorformatting support)
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
