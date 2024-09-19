@@ -1,5 +1,5 @@
 name: MxTags
-version: '0.7'
+version: '0.8'
 main: dev.mxlx.mxTags.MxTags
 api-version: '1.20'
 author: Maschlax
@@ -10,7 +10,16 @@ commands:
     usage: /<command> <argument>
     description: Open the Tag Selection GUI
     aliases: [tag, mxtag, mxtags]
+    permission: mxtags.tag
   tagmanager:
     usage: /<command> <argument>
     description: Manage your tags
     aliases: [tm, mxtm, mxtagmanager]
+    permission: mxtags.admin
+permissions:
+  mxtags.tag:
+    description: Allows to open the tag selector GUI
+    default: true
+  mxtags.admin:
+    description: Allows to manage the tags using the /tagmanager command
+    default: op

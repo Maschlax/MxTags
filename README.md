@@ -1,19 +1,9 @@
-# MxTags v0.7
+# MxTags v0.8
 A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
 
 ## Important
 ### !! This plugin is 1.16+ only.
-### !! As of now, it is unsafe to use on public servers due to the lack of permission requirements
-
-## Config
-Enable or disable debug mode. Useful for getting more complex error messages.
-
-Configure database settings. Not sure if something else than MariaDB works. 
-
-## Formatting
-Hex Colors can be used in tags under the format "<#ffffff>"
-
-Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same "Color Format" setting
+### !! This plugin might not work with a different database than MariaDB
 
 ## Commands
 - /tag : Open tag selection GUI
@@ -23,9 +13,23 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - /tm delete \<tagID>
 - /tm list (\<page>) : List all tags, Pagination with 10 results each page
 
+## Permissions
+mxtags.tag : Default permission, allows to open the tag selector GUI. **Applied by default**
+
+mxtags.admin : Admin permission, allows to manage the tags using the /tagmanager command
+
+## Config
+Enable or disable debug mode. Useful for getting more complex error messages.
+
+Configure database settings. Not sure if something else than MariaDB works.
+
+## Formatting
+Hex Colors can be used in tags under the format "<#ffffff>"
+
+Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same "Color Format" setting
+
 ## Planned features
 - Add /tm modify command
-- Add permissions
 - Check which databases are supported using my syntax
 - Add Config for messages (with colorformatting support)
 - (Add support for local storage)
