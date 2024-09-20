@@ -100,6 +100,7 @@ public class TagManageCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "Invalid tagID input. Use a valid integer and make sure the tag exists");
             return;
         }
+        tagID = Integer.parseInt(id);
 
         switch (type) {
             case "tag":
