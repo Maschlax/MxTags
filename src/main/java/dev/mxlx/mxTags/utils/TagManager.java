@@ -48,6 +48,36 @@ public class TagManager {
         }
     }
 
+    public void modifyTag(int tagID, String newTag) {
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET tag = ? WHERE id = ?");
+
+            statement.setString(1, newTag);
+            statement.setInt(2, tagID);
+
+            statement.executeUpdate();
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Unable to change tag from tagID '" + tagID + "' to new tag: " + newTag);
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+    }
+
+    public void modifyTagSlot(int tagID, int slot) {
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = ? WHERE id = ?");
+            statement.setInt(1, slot);
+            statement.setInt(2, tagID);
+
+            statement.executeUpdate();
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Unable to change slot from tagID '" + tagID + "' to slot: " + slot);
+        }
+    }
+
     public String getTag(int tagID) {
         String tag = null;
         try {

@@ -28,6 +28,7 @@ public class TagManageCommand implements CommandExecutor {
                 deleteTag(sender, args);
                 break;
             case "modify":
+                modifyTag(sender, args);
                 break;
             case "list":
                 listTags(sender, args);
@@ -43,7 +44,7 @@ public class TagManageCommand implements CommandExecutor {
         sender.sendMessage("==> MxTags Help");
         sender.sendMessage("/tm create <name> <slot> : Create a new tag");
         sender.sendMessage("/tm delete <tagID> : Remove a tag");
-        sender.sendMessage("/tm modify <tagID> <name> <slot> : Modify a tag");
+        sender.sendMessage("/tm modify <tagID> <type> <change> : Modify a tag");
         sender.sendMessage("/tm list (<page>) : List all tags");
         sender.sendMessage("/tm help : Show this message");
     }
@@ -79,18 +80,49 @@ public class TagManageCommand implements CommandExecutor {
             return;
         }
         if (!math.isInteger(args[1])) {
-            sender.sendMessage("Invalid slot input. Use a valid integer");
+            sender.sendMessage(ChatColor.RED + "Invalid slot input. Use a valid integer");
             return;
         }
         mxTags.tagManager().deleteTag(Integer.parseInt(args[1]));
         sender.sendMessage("Successfully deleted tag with id: " + args[1]);
     }
 
+    private void modifyTag(CommandSender sender, String[] args) {
+        if (args.length != 4) {
+            sender.sendMessage(ChatColor.RED + "Invalid arguments provided. Use /tm modify <tagID> <type> <change>");
+            return;
+        }
+        String id = args[1];
+        String type = args[2];
+        String change = args[3];
+        int tagID = 0;
+        if (!math.isInteger(id) || mxTags.tagManager().getTag(Integer.parseInt(id)) == null) {
+            sender.sendMessage(ChatColor.RED + "Invalid tagID input. Use a valid integer and make sure the tag exists");
+            return;
+        }
+        tagID = Integer.parseInt(id);
+
+        switch (type) {
+            case "tag":
+                mxTags.tagManager().modifyTag(tagID, change);
+                break;
+            case "slot":
+                if (!math.isInteger(change)) { sender.sendMessage(ChatColor.RED + "Invalid slot input. Use a valid integer"); return; }
+                mxTags.tagManager().modifyTagSlot(tagID, Integer.parseInt(change));
+                break;
+            default:
+                sender.sendMessage(ChatColor.RED + "Invalid type input. Use either 'tag' or 'slot'");
+                return;
+        }
+
+        sender.sendMessage(ChatColor.GREEN + "Changed " + type + " to '" + change + "' at tag with ID: " + tagID);
+    }
+
     private void listTags(CommandSender sender, String[] args) {
         int page = 1;
         if (args.length > 1) {
             if (!math.isInteger(args[1])) {
-                sender.sendMessage("Invalid page input. Use a valid integer");
+                sender.sendMessage(ChatColor.RED + "Invalid page input. Use a valid integer");
                 return;
             } else {
                 page = Integer.parseInt(args[1]);
