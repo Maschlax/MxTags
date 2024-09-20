@@ -66,7 +66,12 @@ public class TagManager {
 
     public void modifyTagSlot(int tagID, int slot) {
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = ? WHERE id = ?");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = slot + 1 WHERE slot >= ?");
+            statement.setInt(1, slot);
+
+            statement.executeUpdate();
+
+            statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = ? WHERE id = ?");
             statement.setInt(1, slot);
             statement.setInt(2, tagID);
 

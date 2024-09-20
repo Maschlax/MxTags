@@ -34,3 +34,6 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
 - Check which databases are supported using my syntax
 - (Add support for local storage)
+
+## Known Bugs
+- Tag slots not working

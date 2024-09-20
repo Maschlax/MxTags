@@ -130,7 +130,7 @@ public class TagManageCommand implements CommandExecutor {
         }
         ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags(page);
 
-        sender.sendMessage(ChatColor.GOLD + "==> MxTags List" + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT) + ChatColor.YELLOW + ")");
+        sender.sendMessage(ChatColor.GOLD + "==> MxTags List " + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT) + ChatColor.YELLOW + ")");
         if (tags.isEmpty()) { sender.sendMessage(ChatColor.RED + "No tags found"); return; }
 
         sender.sendMessage(ChatColor.WHITE + "id" + ChatColor.GRAY + " :  " + ChatColor.WHITE + "tag" + ChatColor.GRAY + " : " + ChatColor.WHITE + "slot");
