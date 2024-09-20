@@ -5,13 +5,13 @@ import dev.mxlx.mxTags.utils.TagManager;
 import dev.mxlx.mxTags.utils.math;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.command.TabExecutor;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TagManageCommand implements CommandExecutor {
+public class TagManageCommand implements TabExecutor {
 
     private MxTags mxTags = MxTags.getInstance();
 
@@ -128,6 +128,10 @@ public class TagManageCommand implements CommandExecutor {
                 page = Integer.parseInt(args[1]);
             }
         }
+        if (page == 0 || page > mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT)) {
+            sender.sendMessage(ChatColor.RED + "TagList Page " + page + " doesn't exist");
+            return;
+        }
         ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTags(page);
 
         sender.sendMessage(ChatColor.GOLD + "==> MxTags List " + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT) + ChatColor.YELLOW + ")");
@@ -142,5 +146,34 @@ public class TagManageCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.WHITE + tagID + ChatColor.GRAY + " : " + tag + ChatColor.GRAY + " : " + ChatColor.WHITE + slot);
         }
         sender.sendMessage("");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 1) {
+            ArrayList<String> options = new ArrayList<>();
+            options.add("create");
+            options.add("delete");
+            options.add("modify");
+            options.add("list");
+            options.add("help");
+            return options;
+
+        } else if (args.length == 2 && args[0].equals("list")) {
+            ArrayList<String> options = new ArrayList<>();
+            int chatPageAmount = mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT);
+            for (int i = 1; i <= chatPageAmount; i++) {
+                options.add(String.valueOf(i));
+            }
+            return options;
+
+        } else if (args.length == 3 && args[0].equals("modify")) {
+            ArrayList<String> options = new ArrayList<>();
+            options.add("tag");
+            options.add("slot");
+            return options;
+        }
+
+        return null;
     }
 }
