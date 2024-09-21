@@ -1,9 +1,9 @@
-# MxTags v0.9
+# MxTags v0.9.1
 A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
 
 ## Important
 ### !! This plugin is 1.16+ only.
-### !! This plugin might not work with a different database than MariaDB
+### !! This plugin needs either a MySQL or MariaDB database
 
 ## Commands
 - /tag : Open tag selection GUI
@@ -28,11 +28,18 @@ Hex Colors can be used in tags under the format "<#ffffff>"
 
 Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same "Color Format" setting
 
+## Install
+- Put plugin jar in the plugins folder
+- Start the server
+- Stop the server
+- Configure database settings in config.yml
+- Start the server again
+- Create as much tags as you want!
+
 ## Planned features
-- Add Config for messages (with colorformatting support)
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
-- Check which databases are supported using my syntax
-- (Add support for local storage)
+- Add Config for messages (with colorformatting support)
+- Add support for local storage
 
 ## Known Bugs
 - Tag slots not working

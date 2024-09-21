@@ -1,5 +1,5 @@
 name: MxTags
-version: '0.9'
+version: '0.9.1'
 main: dev.mxlx.mxTags.MxTags
 api-version: '1.20'
 author: Maschlax
