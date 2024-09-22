@@ -1,9 +1,7 @@
-# MxTags v0.9.5
-A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
+# MxTags v1.0
+A simple PlayerTags Plugin for Minecraft. *Made by Maschlax*
 
-## Important
-### !! This plugin is 1.16+ only.
-### !! This plugin needs either a MySQL or MariaDB database
+Tags are the same as a player suffixes
 
 ## Commands
 - /tag : Open tag selection GUI
@@ -19,16 +17,16 @@ mxtags.tag : Default permission, allows to open the tag selector GUI. **Applied 
 mxtags.admin : Admin permission, allows to manage the tags using the /tagmanager command
 
 ## Config
-Enable or disable debug mode. Useful for getting more complex error messages.
+Enable or disable debug mode. Useful for getting more complex error messages
 
-Configure database settings. Not sure if something else than MariaDB works.
+Configure database settings
 
 ## Formatting
 Hex Colors can be used in tags under the format "<#ffffff>"
 
 Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same "Color Format" setting
 
-## Install
+## Installation
 - Put plugin jar in the plugins folder
 - Start the server
 - Stop the server
@@ -36,7 +34,19 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - Start the server again
 - Create as much tags as you want!
 
+## Requirements
+- Minecraft version 1.16 - 1.20
+- Java version 17 and above 
+- MySQL or MariaDB database
+
 ## Planned features
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
 - Add Config for messages (with colorformatting support)
 - Add support for local storage
+
+## License
+The MxTags project is licensed under the MxPlugins License - see the [LICENSE](./LICENSE) file for details.
+
+## Contact
+- via Discord @maschlax (preferred)
+- via Mail max@mxlx.dev
