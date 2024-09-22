@@ -14,36 +14,49 @@ public class TagManager {
 
     private MxTags mxTags = MxTags.getInstance();
 
-    public void createTag(String tag, Integer slot) {
+    public void createTag(String tag, Integer priority) {
         tag = mxTags.colorFormatter().formatHexColors(tag);
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = slot + 1 WHERE slot >= ?");
-            statement.setInt(1, slot);
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET priority = priority + 1 WHERE priority >= ?");
+            statement.setInt(1, priority);
             statement.executeUpdate();
 
-            statement = mxTags.getDatabase().getConnection().prepareStatement("INSERT INTO tags(tag, slot) VALUES (?, ?)");
+            statement = mxTags.getDatabase().getConnection().prepareStatement("INSERT INTO tags(tag, priority) VALUES (?, ?)");
             statement.setString(1, tag);
-            statement.setInt(2, slot);
+            statement.setInt(2, priority);
 
             statement.executeUpdate();
             statement.close();
 
         } catch (SQLException e) {
-            mxTags.getLogger().severe("Unable to create tag: " + tag + " in slot " + slot);
+            mxTags.getLogger().severe("Unable to create tag: " + tag + " with priority " + priority);
             if (mxTags.debugMode()) e.printStackTrace();
         }
     }
 
     public void deleteTag(int tagID) {
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("DELETE FROM tags WHERE id = ?");
+            int tagPriority = 0;
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT priority FROM tags WHERE id = ?");
             statement.setInt(1, tagID);
 
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                tagPriority = resultSet.getInt(1);
+            }
+
+            statement = mxTags.getDatabase().getConnection().prepareStatement("DELETE FROM tags WHERE id = ?");
+            statement.setInt(1, tagID);
             statement.executeUpdate();
+
+            statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET priority = priority - 1 WHERE priority > ?");
+            statement.setInt(1, tagPriority);
+            statement.executeUpdate();
+
             statement.close();
 
         } catch (SQLException exception) {
-            mxTags.getLogger().severe("Unable to remove tag: " + tagID);
+            mxTags.getLogger().severe("Unable to delete tag with id: " + tagID);
             if (mxTags.debugMode()) exception.printStackTrace();
         }
     }
@@ -64,22 +77,22 @@ public class TagManager {
         }
     }
 
-    public void modifyTagSlot(int tagID, int slot) {
+    public void modifyTagPriority(int tagID, int priority) {
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = slot + 1 WHERE slot >= ?");
-            statement.setInt(1, slot);
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET priority = priority + 1 WHERE priority >= ?");
+            statement.setInt(1, priority);
 
             statement.executeUpdate();
 
-            statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET slot = ? WHERE id = ?");
-            statement.setInt(1, slot);
+            statement = mxTags.getDatabase().getConnection().prepareStatement("UPDATE tags SET priority = ? WHERE id = ?");
+            statement.setInt(1, priority);
             statement.setInt(2, tagID);
 
             statement.executeUpdate();
             statement.close();
 
         } catch (SQLException exception) {
-            mxTags.getLogger().severe("Unable to change slot from tagID '" + tagID + "' to slot: " + slot);
+            mxTags.getLogger().severe("Unable to change priority from tagID '" + tagID + "' to priority: " + priority);
         }
     }
 
@@ -101,6 +114,25 @@ public class TagManager {
         }
 
         return tag;
+    }
+
+    public int getTagIDfromPriority(int priority) {
+        int tagID = 0;
+        try {
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id FROM tags WHERE priority = ?");
+            statement.setInt(1, priority);
+
+            ResultSet results = statement.executeQuery();
+            if (results.next()) {
+                tagID = results.getInt("id");
+            }
+            statement.close();
+
+        } catch (SQLException exception) {
+            mxTags.getLogger().severe("Error finding tag with priority: " + priority);
+            if (mxTags.debugMode()) exception.printStackTrace();
+        }
+        return tagID;
     }
 
     public int getPlayerTagID(Player player) {
@@ -157,7 +189,7 @@ public class TagManager {
         player.setDisplayName(player.getName() + " " + tag);
         player.setPlayerListName(player.getName() + " " + tag);
 
-        if (message) player.sendMessage(ChatColor.GREEN + "Successfully selected tag: " + tag);
+        if (message) player.sendMessage(ChatColor.GREEN + "Successfully selected tag: " + ChatColor.RESET + tag);
     }
 
     private final int ROW_AMOUNT_PER_CHAT_LIST_PAGE = 10;
@@ -174,8 +206,8 @@ public class TagManager {
             while (results.next()) {
                 String tagID = "" + results.getInt("id");
                 String tag = results.getString(2);
-                String tagSlot = "" + results.getInt(3);
-                tags.add(tagID + "¢" + tag + "¢" + tagSlot);
+                String tagPriority = "" + results.getInt(3);
+                tags.add(tagID + "¢" + tag + "¢" + tagPriority);
             }
             statement.close();
 
@@ -192,7 +224,7 @@ public class TagManager {
         int offset = (page * 45) - 45;
 
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT tag FROM tags ORDER BY id LIMIT 45 OFFSET ?");
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT tag FROM tags ORDER BY priority LIMIT 45 OFFSET ?");
             statement.setInt(1, offset);
             ResultSet results = statement.executeQuery();
 

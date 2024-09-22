@@ -1,4 +1,4 @@
-# MxTags v0.9.1
+# MxTags v0.9.5
 A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
 
 ## Important
@@ -9,7 +9,7 @@ A simple PlayerTags Plugin (Player suffixes) *Made by Maschlax*
 - /tag : Open tag selection GUI
 - /tagmanager \<argument> : Main command - Alias: /tm
 - /tm help : Show Help message
-- /tm create \<name> (\<slot>)
+- /tm create \<name> (\<priority>)
 - /tm delete \<tagID>
 - /tm list (\<page>) : List all tags, Pagination with 10 results each page
 
@@ -40,6 +40,3 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - Improve UX (no flickering between GUI pages, no mouse reset on tag select)
 - Add Config for messages (with colorformatting support)
 - Add support for local storage
-
-## Known Bugs
-- Tag slots not working

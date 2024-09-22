@@ -51,7 +51,7 @@ public class DataBase {
 
     public void initializeDatabase() throws SQLException {
         Statement statement = getConnection().createStatement();
-        String sql = "CREATE TABLE IF NOT EXISTS tags(id int PRIMARY KEY AUTO_INCREMENT, tag text, slot int)";
+        String sql = "CREATE TABLE IF NOT EXISTS tags(id int PRIMARY KEY AUTO_INCREMENT, tag text, priority int)";
         statement.execute(sql);
         sql = "CREATE TABLE IF NOT EXISTS players(uuid varchar(36), tag int, FOREIGN KEY (tag) REFERENCES tags(id))";
         statement.execute(sql);

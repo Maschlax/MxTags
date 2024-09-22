@@ -42,7 +42,7 @@ public class TagManageCommand implements TabExecutor {
 
     private void showHelpMessage(CommandSender sender) {
         sender.sendMessage("==> MxTags Help");
-        sender.sendMessage("/tm create <name> <slot> : Create a new tag");
+        sender.sendMessage("/tm create <name> <priority> : Create a new tag");
         sender.sendMessage("/tm delete <tagID> : Remove a tag");
         sender.sendMessage("/tm modify <tagID> <type> <change> : Modify a tag");
         sender.sendMessage("/tm list (<page>) : List all tags");
@@ -51,27 +51,27 @@ public class TagManageCommand implements TabExecutor {
 
     private void createTag(CommandSender sender, String[] args) {
         if (args.length != 3 && args.length != 2) {
-            sender.sendMessage("Invalid arguments provided. Use /tm create <name> (<slot>)");
+            sender.sendMessage("Invalid arguments provided. Use /tm create <name> (<priority>)");
             return;
         }
-        int slot = 0;
+        int priority = 0;
 
         if (args.length == 3) {
             if (!math.isInteger(args[2])) {
-                sender.sendMessage("Invalid slot input. Use a valid integer");
+                sender.sendMessage("Invalid priority input. Use a valid integer");
                 return;
             }
-            slot = Integer.parseInt(args[2]);
-            if (slot < 0) {
-                sender.sendMessage(ChatColor.RED + "Invalid slot input. Value cannot be negative");
+            priority = Integer.parseInt(args[2]);
+            if (priority < 0) {
+                sender.sendMessage(ChatColor.RED + "Invalid priority input. Value cannot be negative");
                 return;
             }
         } else {
-            slot = mxTags.tagManager().getEntryAmount(TagManager.listEntryType.TAG_AMOUNT) + 1;
+            priority = mxTags.tagManager().getEntryAmount(TagManager.listEntryType.TAG_AMOUNT) + 1;
         }
 
-        mxTags.tagManager().createTag(args[1], slot);
-        sender.sendMessage("Successfully created tag '" +  args[1] + ChatColor.WHITE + "' in slot " + ChatColor.GRAY + slot);
+        mxTags.tagManager().createTag(args[1], priority);
+        sender.sendMessage("Successfully created tag '" +  args[1] + ChatColor.WHITE + "' with priority " + ChatColor.GRAY + priority);
     }
 
     private void deleteTag(CommandSender sender, String[] args) {
@@ -80,7 +80,7 @@ public class TagManageCommand implements TabExecutor {
             return;
         }
         if (!math.isInteger(args[1])) {
-            sender.sendMessage(ChatColor.RED + "Invalid slot input. Use a valid integer");
+            sender.sendMessage(ChatColor.RED + "Invalid priority input. Use a valid integer");
             return;
         }
         mxTags.tagManager().deleteTag(Integer.parseInt(args[1]));
@@ -106,12 +106,12 @@ public class TagManageCommand implements TabExecutor {
             case "tag":
                 mxTags.tagManager().modifyTag(tagID, change);
                 break;
-            case "slot":
-                if (!math.isInteger(change)) { sender.sendMessage(ChatColor.RED + "Invalid slot input. Use a valid integer"); return; }
-                mxTags.tagManager().modifyTagSlot(tagID, Integer.parseInt(change));
+            case "priority":
+                if (!math.isInteger(change)) { sender.sendMessage(ChatColor.RED + "Invalid priority input. Use a valid integer"); return; }
+                mxTags.tagManager().modifyTagPriority(tagID, Integer.parseInt(change));
                 break;
             default:
-                sender.sendMessage(ChatColor.RED + "Invalid type input. Use either 'tag' or 'slot'");
+                sender.sendMessage(ChatColor.RED + "Invalid type input. Use either 'tag' or 'priority'");
                 return;
         }
 
@@ -137,13 +137,13 @@ public class TagManageCommand implements TabExecutor {
         sender.sendMessage(ChatColor.GOLD + "==> MxTags List " + ChatColor.YELLOW +  "(" + ChatColor.GOLD + "Page " + page + ChatColor.YELLOW + "/" + ChatColor.GOLD + mxTags.tagManager().getEntryAmount(TagManager.listEntryType.CHAT_PAGE_AMOUNT) + ChatColor.YELLOW + ")");
         if (tags.isEmpty()) { sender.sendMessage(ChatColor.RED + "No tags found"); return; }
 
-        sender.sendMessage(ChatColor.WHITE + "id" + ChatColor.GRAY + " :  " + ChatColor.WHITE + "tag" + ChatColor.GRAY + " : " + ChatColor.WHITE + "slot");
+        sender.sendMessage(ChatColor.WHITE + "id" + ChatColor.GRAY + " :  " + ChatColor.WHITE + "tag" + ChatColor.GRAY + " : " + ChatColor.WHITE + "priority");
         for (String tagEntry : tags) {
             String[] entry = tagEntry.split("¢");
             String tagID = entry[0];
             String tag = entry[1];
-            String slot = entry[2];
-            sender.sendMessage(ChatColor.WHITE + tagID + ChatColor.GRAY + " : " + tag + ChatColor.GRAY + " : " + ChatColor.WHITE + slot);
+            String priority = entry[2];
+            sender.sendMessage(ChatColor.WHITE + tagID + ChatColor.GRAY + " : " + tag + ChatColor.GRAY + " : " + ChatColor.WHITE + priority);
         }
         sender.sendMessage("");
     }
@@ -170,7 +170,7 @@ public class TagManageCommand implements TabExecutor {
         } else if (args.length == 3 && args[0].equals("modify")) {
             ArrayList<String> options = new ArrayList<>();
             options.add("tag");
-            options.add("slot");
+            options.add("priority");
             return options;
         }
 

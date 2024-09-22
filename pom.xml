@@ -6,7 +6,7 @@
 
     <groupId>dev.mxlx</groupId>
     <artifactId>MxTags</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.5</version>
     <packaging>jar</packaging>
 
     <name>MxTags</name>

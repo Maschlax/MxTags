@@ -39,7 +39,7 @@ public class ClickListener implements Listener {
         }
 
         if (player.getDisplayName().toLowerCase().contains(itemName.toLowerCase())) return;
-        int tagID = (event.getSlot() + 1 ) * page;
+        int tagID = mxTags.tagManager().getTagIDfromPriority((event.getSlot() + 1 ) * page);
         if (mxTags.tagManager().tagExists(itemName)) mxTags.tagManager().selectTag(player, tagID);
         mxTags.tagSelectionGUI().openTagSelectionGUI(player, page);
     }
