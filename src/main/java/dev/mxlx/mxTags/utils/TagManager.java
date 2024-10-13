@@ -116,11 +116,11 @@ public class TagManager {
         return tag;
     }
 
-    public int getTagIDfromPriority(int priority) {
+    public int getTagIDfromPriority(int index) {
         int tagID = 0;
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id FROM tags WHERE priority = ?");
-            statement.setInt(1, priority);
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id FROM (SELECT id, ROW_NUMBER() OVER (ORDER BY priority) AS `index` FROM tags) AS ordered_tags WHERE `index` = ?");
+            statement.setInt(1, index);
 
             ResultSet results = statement.executeQuery();
             if (results.next()) {
@@ -129,7 +129,7 @@ public class TagManager {
             statement.close();
 
         } catch (SQLException exception) {
-            mxTags.getLogger().severe("Error finding tag with priority: " + priority);
+            mxTags.getLogger().severe("Error finding tag with priority: " + index);
             if (mxTags.debugMode()) exception.printStackTrace();
         }
         return tagID;
