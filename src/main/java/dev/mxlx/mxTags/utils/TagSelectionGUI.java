@@ -23,16 +23,17 @@ public class TagSelectionGUI {
         player.closeInventory();
 
         Inventory inventory = Bukkit.createInventory(null, 54, "Tag Selector - Page " + page + "/" + tagManager.getEntryAmount(TagManager.listEntryType.GUI_PAGE_AMOUNT));
-        ArrayList<String> tags = (ArrayList<String>) mxTags.tagManager().listTagsAsGUIpage(page);
+        ArrayList<TagManager.Tag> tags = (ArrayList<TagManager.Tag>) mxTags.tagManager().listTagsAsGUIpage(page);
 
         int index = 0;
-        for (String tag : tags) {
+        for (TagManager.Tag tag : tags) {
             ItemStack item = new ItemStack(Material.NAME_TAG);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(tag);
+            String tagText = tag.getTag();
+            meta.setDisplayName(tagText);
             List<String> lore = Arrays.asList("", ChatColor.GREEN + "Click to select this tag");
             try {
-                if (ChatColor.stripColor(tagManager.getTag(tagManager.getPlayerTagID(player))).equalsIgnoreCase(ChatColor.stripColor(tag))) {
+                if (ChatColor.stripColor(tagManager.getTag(tagManager.getPlayerTagID(player))).equalsIgnoreCase(ChatColor.stripColor(tagText))) {
                     lore.set(1, ChatColor.AQUA + "You have selected this tag");
                 } } catch (NullPointerException exception) {}
             meta.setLore(lore);

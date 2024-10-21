@@ -9,10 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TagManager {
 
     private MxTags mxTags = MxTags.getInstance();
+
+    public static final int tagAmountPerGUIpage = 45;
 
     public void createTag(String tag, Integer priority) {
         tag = mxTags.colorFormatter().formatHexColors(tag);
@@ -97,42 +100,21 @@ public class TagManager {
     }
 
     public String getTag(int tagID) {
-        String tag = null;
-        try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT * FROM tags WHERE id = ?");
-            statement.setInt(1, tagID);
-            ResultSet results = statement.executeQuery();
-
-            if (results.next()) {
-                tag = results.getString("tag");
-            }
-            statement.close();
-
-        } catch (SQLException exception) {
-            mxTags.getLogger().severe("Error finding tag with id: " + tagID);
-            if (mxTags.debugMode()) exception.printStackTrace();
+        String tagText = null;
+        Optional<Tag> tagOptional = tags.stream().filter(tag -> tag.getId() == tagID).findFirst();
+        if (!tagOptional.isPresent()) {
+            mxTags.getLogger().severe("Tag not found. ");
+            return tagText;
         }
+        tagText = tagOptional.get().getTag();
 
-        return tag;
+        return tagText;
     }
 
     public int getTagIDfromPriority(int index) {
-        int tagID = 0;
-        try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id FROM (SELECT id, ROW_NUMBER() OVER (ORDER BY priority) AS `index` FROM tags) AS ordered_tags WHERE `index` = ?");
-            statement.setInt(1, index);
-
-            ResultSet results = statement.executeQuery();
-            if (results.next()) {
-                tagID = results.getInt("id");
-            }
-            statement.close();
-
-        } catch (SQLException exception) {
-            mxTags.getLogger().severe("Error finding tag with priority: " + index);
-            if (mxTags.debugMode()) exception.printStackTrace();
-        }
-        return tagID;
+        if (index > tags.size()) return 0;
+        Tag tag = tags.get(index);
+        return tag.getId();
     }
 
     public int getPlayerTagID(Player player) {
@@ -219,26 +201,61 @@ public class TagManager {
         return tags;
     }
 
-    public List<String> listTagsAsGUIpage(int page) {
-        ArrayList<String> tags = new ArrayList<>();
-        int offset = (page * 45) - 45;
+    public class Tag {
+        private String tag;
+        private int priority;
+        private int id;
 
+        public String getTag() {
+            return tag;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
+
+        public void setPriority(int priority) {
+            this.priority = priority;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+    }
+
+    private List<Tag> tags = new ArrayList<>();
+
+    public void initializeTags() {
         try {
-            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT tag FROM tags ORDER BY priority LIMIT 45 OFFSET ?");
-            statement.setInt(1, offset);
+            PreparedStatement statement = mxTags.getDatabase().getConnection().prepareStatement("SELECT id, tag, priority FROM tags ORDER BY priority");
             ResultSet results = statement.executeQuery();
 
             while (results.next()) {
-                String tag = results.getString("tag");
+                Tag tag = new Tag();
+                tag.setTag(results.getString("tag"));
+                tag.setId(results.getInt("id"));
+                tag.setPriority(results.getInt("priority"));
                 tags.add(tag);
             }
 
         } catch (SQLException exception) {
-            mxTags.getLogger().severe("Error listing tags");
+            mxTags.getLogger().severe("Error initializing tags");
             if (mxTags.debugMode()) exception.printStackTrace();
         }
+    }
 
-        return tags;
+    public List<Tag> listTagsAsGUIpage(int page) {
+        int index = (page - 1) * tagAmountPerGUIpage;
+
+        return tags.subList(index, Math.min(tags.size(), index + tagAmountPerGUIpage));
     }
 
     public enum listEntryType {

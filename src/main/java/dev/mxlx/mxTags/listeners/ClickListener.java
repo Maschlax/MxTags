@@ -1,6 +1,7 @@
 package dev.mxlx.mxTags.listeners;
 
 import dev.mxlx.mxTags.MxTags;
+import dev.mxlx.mxTags.utils.TagManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +40,7 @@ public class ClickListener implements Listener {
         }
 
         if (player.getDisplayName().toLowerCase().contains(itemName.toLowerCase())) return;
-        int tagID = mxTags.tagManager().getTagIDfromPriority((event.getSlot() + 1 ) * page);
+        int tagID = mxTags.tagManager().getTagIDfromPriority((event.getSlot()) + TagManager.tagAmountPerGUIpage);
         if (mxTags.tagManager().tagExists(itemName)) mxTags.tagManager().selectTag(player, tagID);
         mxTags.tagSelectionGUI().openTagSelectionGUI(player, page);
     }
