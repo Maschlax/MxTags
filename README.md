@@ -3,6 +3,8 @@ A simple PlayerTags Plugin for Minecraft. *Made by Maschlax*
 
 Tags are the same as a player suffixes
 
+**!! MORE THAN ONE TAG SELECTION GUI PAGE IS NOT YET WORKING !!**
+
 ## Commands
 - /tag : Open tag selection GUI
 - /tagmanager \<argument> : Main command - Alias: /tm
@@ -40,7 +42,7 @@ Recommendation for gradients: https://birdflop.com/resources/rgb/ with the same 
 - MySQL or MariaDB database
 
 ## Planned features
-- Improve UX (no flickering between GUI pages, no mouse reset on tag select)
+- Complete rework, enhancing storage management and overall UX
 - Add Config for messages (with colorformatting support)
 - Add support for local storage
 
