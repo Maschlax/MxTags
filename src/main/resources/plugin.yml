@@ -1,0 +1,26 @@
+name: MxTagsV2
+version: '0.0'
+main: net.wishmc.mxTagsV2.MxTagsV2
+api-version: '1.21'
+prefix: MxTags
+load: STARTUP
+authors: [ Maschlax ]
+description: Simple Tag System
+website: https://mxlx.dev
+commands:
+  tags:
+    usage: /<command>
+    description: Open the Tag Selection GUI
+    aliases: [tag, mxtag, mxtags]
+  tagremove:
+    usage: /<command>
+    description: Unselect a tag
+    aliases: [removetag, cleartag]
+  tagmanager:
+    usage: /<command> <list | unselect | reload>
+    description: Tag manage command
+    aliases: [tm, tagm, tmanager, mxtagmanager]
+    permission: mxtags.admin
+permissions:
+  mxtags.admin:
+    default: op
